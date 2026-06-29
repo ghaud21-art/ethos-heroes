@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보처리방침 — 윤리 히어로즈</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+    background: #F7F9FC;
+    color: #2C2A26;
+    line-height: 1.8;
+  }
+  .top-bar {
+    background: #4AA8D8;
+    padding: 14px 24px;
+  }
+  .top-bar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .top-bar a:hover { opacity: 0.85; }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; color: #1A1A2E; }
+  .date { font-size: 13px; color: #888; margin-bottom: 40px; }
+  h2 { font-size: 16px; font-weight: 700; margin: 32px 0 10px; color: #1A1A2E; }
+  p { font-size: 14px; color: #444; margin-bottom: 8px; }
+  ul { font-size: 14px; color: #444; padding-left: 20px; margin-bottom: 8px; }
+  li { margin-bottom: 4px; }
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #4AA8D8; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 10px 14px; border-bottom: 1px solid #E5E0D8; color: #444; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .highlight {
+    background: #EBF4FF;
+    border-left: 3px solid #4AA8D8;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #333;
+    margin: 12px 0;
+  }
+  .divider { height: 1px; background: #E5E0D8; margin: 40px 0; }
+  .footer-note { font-size: 13px; color: #999; text-align: center; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="index.html">← 윤리 히어로즈로 돌아가기</a>
+</div>
+<div class="container">
+  <h1>개인정보처리방침</h1>
+  <div class="date">시행일: 2026년 7월 1일</div>
+
+  <div class="highlight">
+    윤리 히어로즈는 학생 개인정보 보호를 최우선으로 생각합니다. 수집된 정보는 교육 목적 외에 절대 사용되지 않으며, 각 교사의 개인 구글 시트에만 저장됩니다.
+  </div>
+
+  <h2>제1조 (수집하는 개인정보 항목)</h2>
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>구분</th>
+        <th>수집 항목</th>
+        <th>수집 목적</th>
+      </tr>
+      <tr>
+        <td>학생</td>
+        <td>학번, 이름, 진로 분야 선택, 딜레마 답변</td>
+        <td>윤리 탐구 결과 생성 및 교사 피드백 제공</td>
+      </tr>
+      <tr>
+        <td>교사</td>
+        <td>이름, 학교명, 클래스 코드, 비밀번호(해시 저장), Gemini API 키(암호화 저장), Google Sheet ID(암호화 저장)</td>
+        <td>교사 인증 및 학생 데이터 관리</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>제2조 (개인정보 수집 방법)</h2>
+  <p>서비스 내 입력 폼을 통해 이용자가 직접 입력하는 방식으로 수집합니다.</p>
+  <p>별도의 쿠키, 트래킹 코드, 광고 서비스는 사용하지 않습니다.</p>
+
+  <h2>제3조 (개인정보 저장 위치)</h2>
+  <ul>
+    <li>학생 답변 및 결과 데이터: 해당 교사의 개인 Google Sheets에 저장 (교사 본인만 접근 가능)</li>
+    <li>교사 등록 정보: 운영자(지니쌤)의 마스터 Google Sheets에 암호화되어 저장</li>
+    <li>Gemini API 키 및 Sheet ID: AES 방식으로 암호화 후 저장</li>
+    <li>별도의 외부 서버나 데이터베이스에 저장되지 않습니다</li>
+  </ul>
+
+  <h2>제4조 (개인정보 보유 및 이용 기간)</h2>
+  <p>학생 데이터는 해당 교사가 직접 관리하는 구글 시트에 저장되며, 보유 기간은 교사가 직접 결정합니다.</p>
+  <p>교사 등록 정보는 탈퇴 요청 시 즉시 삭제됩니다.</p>
+
+  <h2>제5조 (개인정보의 제3자 제공)</h2>
+  <p>수집된 개인정보는 어떠한 경우에도 제3자에게 제공되지 않습니다.</p>
+  <p>단, 법령에 의한 요청이 있을 경우 예외로 합니다.</p>
+
+  <h2>제6조 (AI 처리 관련 안내)</h2>
+  <p>학생의 답변은 Google Gemini API를 통해 처리됩니다. 이 과정에서 답변 내용이 Google의 서버를 경유합니다.</p>
+  <p>Google의 개인정보처리방침은 아래에서 확인하실 수 있습니다.</p>
+  <p><a href="https://policies.google.com/privacy" target="_blank" style="color:#4AA8D8">Google 개인정보처리방침 →</a></p>
+
+  <h2>제7조 (이용자의 권리)</h2>
+  <ul>
+    <li>학생은 담당 교사를 통해 본인 데이터의 열람·수정·삭제를 요청할 수 있습니다.</li>
+    <li>교사는 운영자에게 직접 데이터 삭제를 요청할 수 있습니다.</li>
+    <li>문의: 블로그 댓글 또는 네이버 블로그(blog.naver.com/zsq123)</li>
+  </ul>
+
+  <h2>제8조 (개인정보처리방침 변경)</h2>
+  <p>개인정보처리방침이 변경될 경우 서비스 내 공지 및 블로그를 통해 사전에 안내합니다.</p>
+
+  <div class="divider"></div>
+  <p class="footer-note">© 2026 윤리 히어로즈 · 교사 박진희(지니쌤) all rights reserved.</p>
+</div>
+</body>
+</html>
