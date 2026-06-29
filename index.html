@@ -802,7 +802,7 @@
   <div class="section mt-16">
     <div class="card">
       <div class="input-group"><label>이름</label><input type="text" id="t-reg-name" placeholder="예: 박진희"></div>
-      <div class="input-group"><label>학교명</label><input type="text" id="t-reg-school" placeholder="예: 대평고등학교"></div>
+      <div class="input-group"><label>학교명</label><input type="text" id="t-reg-school" placeholder="예: OO고등학교"></div>
       <div class="input-group">
         <label>선생님 코드 (직접 설정)</label>
         <input type="text" id="t-reg-code" placeholder="예: 학교-코드1" style="text-transform:uppercase">
@@ -1103,7 +1103,7 @@
     </div>
     <div class="ai-label">
       <div class="ai-label-dot"></div>
-      <div class="ai-label-text">소크라테스식 꼬리질문</div>
+      <div class="ai-label-text">꼬리질문</div>
     </div>
     <div class="ai-bubble" id="followup-question">
       <!-- 꼬리질문 텍스트 -->
@@ -1253,6 +1253,20 @@
 
 <script>
 
+
+
+/* 마크다운 제거 유틸 */
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')   // **bold**
+    .replace(/\*(.+?)\*/g, '$1')         // *italic*
+    .replace(/^#{1,6}\s+/gm, '')          // # 헤더
+    .replace(/`{1,3}([^`]*)`{1,3}/g, '$1')// `code`
+    .replace(/^[-*]\s+/gm, '')            // - 목록
+    .replace(/^\d+\.\s+/gm, '')         // 1. 목록
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1') // [링크](url)
+    .trim();
+}
 
 /* 이벤트 위임 — onclick 대신 안전한 바인딩 */
 document.addEventListener('DOMContentLoaded', function() {
@@ -1687,13 +1701,13 @@ async function goDilemmaNext() {
 [후인습] 5단계: 사회계약 / 6단계: 보편 원리
 
 규칙:
-1. 학생의 현재 단계를 파악한다
-2. 한 단계 위의 사고로 끌어올리는 질문을 한다
-3. 학생의 답변에서 논리적 허점이나 고려하지 못한 관점을 하나만 짚는다
-4. 질문은 반드시 하나만, 150자 이내로 친근하게 작성한다
-5. "틀렸다"는 표현은 절대 사용하지 않는다
+1. 학생의 답변에서 고려하지 못한 관점이나 더 깊이 생각할 부분을 하나 찾는다
+2. 그 부분에 대해 사고를 확장시키는 질문 하나만 던진다
+3. 질문은 150자 이내로 친근하게 작성한다
+4. "틀렸다", "~단계", "콜버그" 같은 표현은 절대 사용하지 않는다
+5. 단계 평가나 판단 없이 순수하게 생각을 자극하는 질문만 작성한다
 6. 한국어로 답변한다
-7. 꼬리질문만 출력한다. 다른 말은 하지 않는다.
+7. 꼬리질문 텍스트만 출력한다. 다른 말은 절대 하지 않는다.
 
 직업군: ${career.name}
 딜레마: ${d.scenario.slice(0,200)}
@@ -1702,7 +1716,7 @@ async function goDilemmaNext() {
 
     const q = await callGemini(prompt);
     state.followupQ = q;
-    document.getElementById('followup-question').innerText = q;
+    document.getElementById('followup-question').innerText = stripMarkdown(q);
     document.getElementById('answer1-recap').innerText = state.answer1;
     document.getElementById('answer2').value = '';
     document.getElementById('count2').innerText = '0자';
@@ -1869,18 +1883,21 @@ function renderDashboard(result, char, story, feedback) {
 
   drawRadar(result.scores);
 
+  // 콜버그: 교사 대시보드에만 있으므로 null 체크
   const stage = result.kohlberg_stage;
-  document.getElementById('kohlberg-badge-wrap').innerHTML =
+  const badgeWrap = document.getElementById('kohlberg-badge-wrap');
+  const commentEl = document.getElementById('kohlberg-comment');
+  if (badgeWrap) badgeWrap.innerHTML =
     `<span class="kohlberg-badge">🧠 ${stage}단계: ${KOHLBERG_LABELS[stage]}</span>`;
-  document.getElementById('kohlberg-comment').innerText = result.kohlberg_comment;
+  if (commentEl) commentEl.innerText = result.kohlberg_comment || '';
 
-  document.getElementById('tendency-main').innerText = result.ethics_tendency.main;
-  document.getElementById('tendency-desc').innerText = result.ethics_tendency.description;
-  document.getElementById('tendency-strength').innerText = result.ethics_tendency.strength;
-  document.getElementById('tendency-weakness').innerText = result.ethics_tendency.weakness;
+  document.getElementById('tendency-main').innerText = stripMarkdown(result.ethics_tendency.main || '');
+  document.getElementById('tendency-desc').innerText = stripMarkdown(result.ethics_tendency.description || '');
+  document.getElementById('tendency-strength').innerText = stripMarkdown(result.ethics_tendency.strength || '');
+  document.getElementById('tendency-weakness').innerText = stripMarkdown(result.ethics_tendency.weakness || '');
 
-  document.getElementById('philosopher-name').innerText = result.philosopher;
-  document.getElementById('philosopher-reason').innerText = result.philosopher_reason;
+  document.getElementById('philosopher-name').innerText = stripMarkdown(result.philosopher || '');
+  document.getElementById('philosopher-reason').innerText = stripMarkdown(result.philosopher_reason || '');
   document.getElementById('career-story').innerText = story;
 
   // 선생님 피드백 표시
