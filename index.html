@@ -916,6 +916,19 @@
       <textarea id="td-feedback-input" rows="4" placeholder="학생에게 전달할 피드백을 입력하세요 (선택사항)"></textarea>
       <button class="btn-primary mt-12" onclick="saveFeedback()">💾 피드백 저장 → 학생에게 전달</button>
     </div>
+
+    <!-- 재시도 허용 -->
+    <div class="card mt-12" style="border-color:var(--rose);background:var(--rose-bg)">
+      <div class="section-title" style="color:var(--rose)">🔄 재시도 허용</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+        이 학생의 기록을 삭제하고 다른 딜레마에 다시 참여할 수 있게 합니다.<br>
+        삭제 후 학생이 로그인하면 처음부터 새로 시작돼요.
+      </div>
+      <button onclick="allowRetry()"
+        style="width:100%;background:transparent;border:1.5px solid var(--rose);border-radius:var(--radius-sm);padding:13px;font-size:14px;font-weight:600;color:var(--rose);cursor:pointer;font-family:inherit">
+        🗑️ 이 학생 기록 삭제 후 재시도 허용
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1519,7 +1532,7 @@ const KOHLBERG_LABELS = ['','처벌/보상 중심','자기이익 중심','관계
 /* ============================================================
    앱 상태
    ============================================================ */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwneZ4e525-x_e-wkw7_bywBkwYPAwiG1RwD8y8mSEwo7j1XnNwWlo5OPSg_Cxb_FR8Kw/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbz3dO8ITRf2eE3lZvSW26znELBFQy2PNCzolmnt_o5wPg3tmsYwj3m9vj55wlBQRYQh2A/exec';
 
 let state = {
   studentId: '', studentName: '', teacherCode: '',
@@ -2301,6 +2314,27 @@ async function saveFeedback() {
 function teacherLogout() {
   state.teacher = null;
   showScreen('role');
+}
+
+async function allowRetry() {
+  if (!currentStudentDetail) return;
+  const name = currentStudentDetail.studentName;
+  const confirmed = confirm(`${name} 학생의 기록을 삭제하고 재시도를 허용할까요?\n\n삭제 후 학생이 로그인하면 처음부터 새로 시작됩니다.`);
+  if (!confirmed) return;
+
+  try {
+    const fd = new FormData();
+    fd.append('action', 'deleteStudentRecord');
+    fd.append('teacherCode', state.teacher.code);
+    fd.append('studentId', currentStudentDetail.studentId);
+    fd.append('studentName', currentStudentDetail.studentName);
+    await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: fd });
+    alert(`${name} 학생의 기록이 삭제됐어요.\n학생이 다시 로그인하면 새로운 딜레마를 선택할 수 있어요.`);
+    showScreen('teacher-dashboard');
+    loadStudentList();
+  } catch(e) {
+    alert('오류: ' + e.message);
+  }
 }
 
 
